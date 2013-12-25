@@ -7,6 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
+    #region Properties: players, netwrokPlayer, currentState, tasks, currentPlayer
 
     public List<BasePlayer> players = new List<BasePlayer>();
 
@@ -16,6 +17,10 @@ public class PlayerManager : MonoBehaviour
     public List<StateManager> tasks = new List<StateManager>();
 
     public BasePlayer currentPlayer;
+
+    #endregion
+
+    #region Indexators PlayerManager[int], PlayerManager[NetworkPlayer]
 
     public int this[int networkID]
     {
@@ -41,10 +46,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+
+    #region Helpers: findPlayerWithNetworkId(NetworkPlayer), playerWithNetworkIdExist(NetworkPlayer), getPlayer(NetworkPlayer), Me(...)
+
     public int findPlayerWithNetworkId(NetworkPlayer player)
     {
-        for (int i = 0; i < players.Count; i++)
-        {
+        for (int i = 0; i < players.Count; i++) {
             if (players[i].network == int.Parse(player.ToString()))
                 return i;
         }
@@ -53,21 +62,35 @@ public class PlayerManager : MonoBehaviour
 
     public bool playerWithNetworkIdExist(NetworkPlayer player)
     {
-        for (int i = 0; i < players.Count; i++)
-        {
+        for (int i = 0; i < players.Count; i++) {
             if (players[i].network == int.Parse(player.ToString()))
                 return true;
         }
         return false;
     }
 
-    public void me(NetworkPlayer player, string name, Color color)
+    public BasePlayer getPlayer(NetworkPlayer player)
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].network == int.Parse(player.ToString()))
+                return players[i];
+        }
+        return currentPlayer;
+    }
+
+    void Me(NetworkPlayer player, string name, Color color)
     {
         BasePlayer mPlayer = new BasePlayer(player);
         mPlayer.name = name;
         mPlayer.color = color;
         this.currentPlayer = mPlayer;
     }
+
+    #endregion
+
+
+    #region Awake/Update
 
     void Awake()
     {
@@ -80,8 +103,7 @@ public class PlayerManager : MonoBehaviour
         if (tasks.Count == 0)
             return;
 
-        foreach(StateManager task in tasks)
-        {
+        foreach(StateManager task in tasks) {
             switch (task) { 
                 case StateManager.NameChanged:
                     networkView.RPC("RPC_ChangePlayerName", RPCMode.AllBuffered, Network.player, currentPlayer.name);
@@ -103,15 +125,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public BasePlayer getPlayer(NetworkPlayer player)
-    {
-        for (int i = 0; i < players.Count; i++) {
-            if (players[i].network == int.Parse(player.ToString()))
-                return players[i];
-        }
-        return currentPlayer;
-    }
+    #endregion
 
+
+    #region Connect/Disconnect
 
     void OnPlayerConnected(NetworkPlayer player)
     {
@@ -123,6 +140,11 @@ public class PlayerManager : MonoBehaviour
     {
         networkView.RPC("RPC_RemovePlayer", RPCMode.AllBuffered, player);
     }
+
+    #endregion
+
+
+    #region RPC Methods
 
     [RPC]
     void RPC_AddPlayer(NetworkPlayer player)
@@ -177,4 +199,6 @@ public class PlayerManager : MonoBehaviour
         BasePlayer remotePlayer = this.getPlayer(player);
         remotePlayer.state = (StatePlayer)newState;
     }
+
+    #endregion
 }
