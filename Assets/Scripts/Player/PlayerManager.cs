@@ -61,6 +61,14 @@ public class PlayerManager : MonoBehaviour
         return false;
     }
 
+    public void me(NetworkPlayer player, string name, Color color)
+    {
+        BasePlayer mPlayer = new BasePlayer(player);
+        mPlayer.name = name;
+        mPlayer.color = color;
+        this.currentPlayer = mPlayer;
+    }
+
     void Awake()
     {
         this.networkView.observed = this;

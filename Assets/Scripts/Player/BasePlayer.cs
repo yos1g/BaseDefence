@@ -43,4 +43,12 @@ public class BasePlayer
         color = Color.black;
     }
 
+    public BasePlayer(NetworkPlayer player)
+    {
+        state = StatePlayer.Respawn;
+        playerScore = 0;
+        network = int.Parse(player.ToString());
+        name = null;
+        color = Color.black;
+    }
 }
