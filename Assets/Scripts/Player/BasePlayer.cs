@@ -16,7 +16,7 @@ public class BasePlayer
     /// <summary>
     /// Player Score
     /// </summary>
-    private int playerScore;
+    public int playerScore;
 
     /// <summary>
     /// Player Color
@@ -34,13 +34,13 @@ public class BasePlayer
     /// <param name="networkID">Network ID</param>
     /// <param name="playerName">Player Name</param>
     /// <param name="playerColor">Player Color</param>
-    public BasePlayer(int networkID, string playerName, Color playerColor)
+    public BasePlayer(int networkID)
     {
         state = StatePlayer.Respawn;
         playerScore = 0;
         network = networkID;
-        name = playerName;
-        color = playerColor;
+        name = null;
+        color = Color.black;
     }
 
 }
