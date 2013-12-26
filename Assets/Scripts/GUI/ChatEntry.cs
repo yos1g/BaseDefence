@@ -13,8 +13,13 @@ class ChatEntry
         isMine = (nIsMine == 0 ? true : false);
     }
 
-    public string getSenderName()
+    public string GetSenderName()
     {
         return GameObject.FindGameObjectWithTag(GameTags.PlayerManager.GetTagName()).GetComponent<PlayerManager>().getPlayer(sender).name.ToString();
+    }
+
+    public string GetMessage()
+    {
+        return GetSenderName() + ":" + message;
     }
 }
