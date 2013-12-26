@@ -5,6 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Managing Network Player and Sync.
 /// </summary>
+[AddComponentMenu("Networks/PlayerManager")]
 [RequireComponent (typeof (NetworkView))]
 public class PlayerManager : MonoBehaviour
 {
