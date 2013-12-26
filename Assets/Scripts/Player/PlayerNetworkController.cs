@@ -30,7 +30,7 @@ public class PlayerNetworkController : MonoBehaviour
         if (!networkView.isMine)
             return;
 
-        this.pManager = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerManager>();
+        this.pManager = GameObject.FindGameObjectWithTag(GameTags.PlayerManager.GetTagName()).GetComponent<PlayerManager>();
     }
 
 

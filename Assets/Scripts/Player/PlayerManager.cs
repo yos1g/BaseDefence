@@ -91,8 +91,14 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
 
-    #region Awake/Update
+    #region Start/Awake/Update
 
+    void Start()
+    {
+        this.transform.gameObject.tag = GameTags.PlayerManager.GetTagName();
+    }
+
+    
     void Awake()
     {
         this.networkView.observed = this;
