@@ -5,6 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Managing Network Player and Sync.
 /// </summary>
+[RequireComponent (typeof (NetworkView))]
 public class PlayerManager : MonoBehaviour
 {
     #region Properties: players, netwrokPlayer, currentState, tasks, currentPlayer
