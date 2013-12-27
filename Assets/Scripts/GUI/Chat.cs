@@ -15,7 +15,7 @@ public class Chat : MonoBehaviour
 
     public bool showChat = false;
 
-    private string inputField;
+    private string inputField = "";
 
     private ArrayList entries = new ArrayList();
 
@@ -23,9 +23,28 @@ public class Chat : MonoBehaviour
 
     private Rect chatWindow = new Rect(50, 50, 200, 300);
 
+	private bool needFocus = false;
+
+	private PlayerManager pManager;
+
+	void Start()
+	{
+		if (skin == null) {
+			Debug.LogWarning("Chat Manager is disabled: skin is null.");
+		}
+		pManager = GameObject.FindGameObjectWithTag(GameTags.PlayerManager.GetTagName()).GetComponent<PlayerManager>();
+		enabled = false;
+	}
+
+
+	public void Enable()
+	{
+		enabled = true;
+	}
 
     void OnGUI()
     {
+
         GUI.skin = skin;
        
         if (GUI.Button(new Rect(Screen.width - 100, Screen.height - 30, 90, 20), showChat ? "Close" : "Open"))
@@ -46,8 +65,8 @@ public class Chat : MonoBehaviour
 
     IEnumerator Focus()
     { 
-        yield return new WaitForSeconds(0.5f);
-        GUI.FocusControl("Chat");
+        yield return new WaitForSeconds(.5f);
+		needFocus = true;
     }
 
     void Close()
@@ -88,15 +107,18 @@ public class Chat : MonoBehaviour
         if (CanSubmit())
         {
             Send(Network.player, inputField, 1);
-            // todo whisper
-            networkView.RPC("Send", RPCMode.Others, Network.player, inputField, 0);
-            // global
-            inputField = "";
+			MessageManager(inputField, 0);
         }
 
         GUI.SetNextControlName("Chat");
         inputField = GUILayout.TextField(inputField);
         GUI.DragWindow();
+
+		if (needFocus)
+		{
+			GUI.FocusControl("Chat");
+			needFocus = false;
+		}
     }
 
     bool CanSubmit()
@@ -106,6 +128,22 @@ public class Chat : MonoBehaviour
 
         return false;
     }
+
+	void MessageManager(string inputField, int mine)
+	{
+
+		string[] cmd = inputField.Split(":");
+		if (cmd.GetLength() == 0)
+			networkView.RPC("Send", RPCMode.Others, Network.player, inputField, mine);
+
+		if (pManager.playerWithNameExist(cmd[0].ToString())) {
+			string remotePlayerName = cmd[0].ToString();
+			cmd[0] = pManager.getPlayer(Network.player).name;
+			networkView.RPC ("Send", pManager[remotePlayerName], Network.player, string.Join("/", cmd), mine);
+		}
+
+		inputField = "";
+	}
 
     [RPC]
     void Send(NetworkPlayer owner, string message, int mine)

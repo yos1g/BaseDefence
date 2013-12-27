@@ -31,6 +31,7 @@ public class PlayerNetworkController : MonoBehaviour
             return;
 
         this.pManager = GameObject.FindGameObjectWithTag(GameTags.PlayerManager.GetTagName()).GetComponent<PlayerManager>();
+		GameObject.FindGameObjectWithTag(GameTags.ChatManager.GetTagName()).GetComponent<Chat>().Enable(); // enable chat for client
     }
 
 
