@@ -178,7 +178,7 @@ public class PlayerManager : MonoBehaviour
     [RPC]
     void RPC_AddPlayer(NetworkPlayer player)
     {
-        BasePlayer newBasePlayer = new BasePlayer(int.Parse(player.ToString()));
+		BasePlayer newBasePlayer = new BasePlayer(player);
         players.Add(newBasePlayer);
     }
 
