@@ -40,7 +40,7 @@ public class Chat : MonoBehaviour
         }
 
         if (showChat)
-            chatWindow = GUI.Window(1, chatWindow, ChatWindow, "Chat");
+            chatWindow = GUI.Window(1, chatWindow, ChatWindow, "Chat"); // whisper windows?
     }
 
 
