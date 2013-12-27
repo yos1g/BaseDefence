@@ -48,6 +48,18 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+	public int this[string playerName]
+	{
+		get
+		{
+			for (int i = 0; i < players.Count; i++) { 
+				if (players[i].name == playerName)
+					return players[i].network;
+			}
+			return 0;
+		}
+	}
+
     #endregion
 
 
@@ -70,6 +82,15 @@ public class PlayerManager : MonoBehaviour
         }
         return false;
     }
+
+	public bool playerWithNameExist(string playerName)
+	{
+		for (int i = 0; i < players.Count; i++) {
+			if (players[i].name == playerName)
+				return true;
+		}
+		return false;
+	}
 
     public BasePlayer getPlayer(NetworkPlayer player)
     {

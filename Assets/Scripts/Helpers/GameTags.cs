@@ -4,7 +4,8 @@ public enum GameTags
 {
     PlayerManager,
     Player,
-    RemotePlayer
+    RemotePlayer,
+	ChatManager
 }
 
 /// <summary>
