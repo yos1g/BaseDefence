@@ -48,15 +48,15 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-	public int this[string playerName]
+	public BasePlayer this[string playerName]
 	{
 		get
 		{
 			for (int i = 0; i < players.Count; i++) { 
 				if (players[i].name == playerName)
-					return players[i].network;
+					return players[i];
 			}
-			return 0;
+			return currentPlayer;
 		}
 	}
 

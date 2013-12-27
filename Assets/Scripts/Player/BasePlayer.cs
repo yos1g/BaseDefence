@@ -29,25 +29,23 @@ public class BasePlayer
     public StatePlayer state;
 
     /// <summary>
+    /// NetworkPlayer
+    /// </summary>
+    public NetworkPlayer networkPlayer;
+
+    /// <summary>
     /// Creating Player Base - for using in networking sync.
     /// </summary>
     /// <param name="networkID">Network ID</param>
     /// <param name="playerName">Player Name</param>
     /// <param name="playerColor">Player Color</param>
-    public BasePlayer(int networkID)
-    {
-        state = StatePlayer.Respawn;
-        playerScore = 0;
-        network = networkID;
-        name = null;
-        color = Color.black;
-    }
 
     public BasePlayer(NetworkPlayer player)
     {
         state = StatePlayer.Respawn;
         playerScore = 0;
         network = int.Parse(player.ToString());
+        networkPlayer = player;
         name = null;
         color = Color.black;
     }
