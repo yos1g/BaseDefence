@@ -59,7 +59,7 @@ public class Chat : MonoBehaviour
         }
 
         if (showChat)
-            chatWindow = GUI.Window(1, chatWindow, ChatWindow, "Chat");
+            chatWindow = GUI.Window(1, chatWindow, ChatWindow, "Chat"); // whisper windows?
     }
 
 
@@ -131,15 +131,15 @@ public class Chat : MonoBehaviour
 
 	void MessageManager(string inputField, int mine)
 	{
-
-		string[] cmd = inputField.Split(":");
-		if (cmd.GetLength() == 0)
+        string[] cmd = inputField.Split(':');
+		if (cmd.Length == 0)
 			networkView.RPC("Send", RPCMode.Others, Network.player, inputField, mine);
 
 		if (pManager.playerWithNameExist(cmd[0].ToString())) {
 			string remotePlayerName = cmd[0].ToString();
 			cmd[0] = pManager.getPlayer(Network.player).name;
-			networkView.RPC ("Send", pManager[remotePlayerName], Network.player, string.Join("/", cmd), mine);
+            string message = string.Join("/", cmd).ToString();
+            networkView.RPC("Send", pManager[remotePlayerName].networkPlayer, Network.player, message, mine);
 		}
 
 		inputField = "";
