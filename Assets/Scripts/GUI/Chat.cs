@@ -8,7 +8,7 @@ using System.Collections;
 /// </summary>
 [AddComponentMenu("Networks/Chat")]
 [RequireComponent(typeof(NetworkView))]
-public class Chat : MonoBehaviour
+public class Chat : BaseGuiWindow
 {
 
     public GUISkin skin;
@@ -21,7 +21,7 @@ public class Chat : MonoBehaviour
 
     private Vector2 scrollPosition = Vector2.zero;
 
-    private Rect chatWindow = new Rect(50, 50, 200, 300);
+    private Rect chatWindow = new Rect(50, 50, 500, 600);
 
 	private bool needFocus = false;
 
@@ -46,20 +46,19 @@ public class Chat : MonoBehaviour
     {
 
         GUI.skin = skin;
-       
-        if (GUI.Button(new Rect(Screen.width - 100, Screen.height - 30, 90, 20), showChat ? "Close" : "Open"))
-        {
-            if (showChat)
-                Close();
+		if (GUI.Button(new Rect(25, 25, 75, 25), showChat ? "Close" : "Open"))
+		{
+			showChat = !showChat;
 
             if (!showChat)
-                StartCoroutine(Focus());
+                Close();
 
-            showChat = !showChat;
+            if (showChat)
+                StartCoroutine(Focus());
         }
 
         if (showChat)
-            chatWindow = GUI.Window(1, chatWindow, ChatWindow, "Chat"); // whisper windows?
+            chatWindow = GUI.Window(1, chatWindow, ChatWindow, ""); // whisper windows?
     }
 
 
@@ -76,13 +75,13 @@ public class Chat : MonoBehaviour
 
     void ChatWindow(int id)
     {
-        GUIStyle closeButtonStyle = GUI.skin.GetStyle("close_button");
-        if (GUI.Button(new Rect(4, 4, closeButtonStyle.normal.background.width, closeButtonStyle.normal.background.height), "", "close_button"))
-            Close();
+        //GUIStyle closeButtonStyle = GUI.skin.GetStyle("close_button");
+        //if (GUI.Button(new Rect(4, 4, closeButtonStyle.normal.background.width, closeButtonStyle.normal.background.height), "", "close_button"))
+        //    Close();
 
-
+		//DoLabel(new Rect(0,0, 100, 100), "Chat");
+		DoWindowTitle (chatWindow, "Chat");
         #region Scroll View
-
         scrollPosition =  GUILayout.BeginScrollView(scrollPosition);
         foreach (ChatEntry entry in entries)
 	    {
@@ -90,12 +89,14 @@ public class Chat : MonoBehaviour
 		    if (!entry.isMine)
 		    {
 			    GUILayout.FlexibleSpace ();
-			    GUILayout.Label (entry.GetMessage(), "chat_rightaligned");
+			    //GUILayout.Label (entry.GetMessage(), "chat_rightaligned");
+				GUILayout.Label (entry.GetMessage());
 		    }
 		    else
 		    {
-                GUILayout.Label(entry.GetMessage(), "chat_leftaligned");
-			    GUILayout.FlexibleSpace ();
+                //GUILayout.Label(entry.GetMessage(), "chat_leftaligned");
+				GUILayout.Label (entry.GetMessage());
+				//GUILayout.FlexibleSpace ();
 		    }
 		    GUILayout.EndHorizontal();
 		    GUILayout.Space(3);
@@ -106,8 +107,9 @@ public class Chat : MonoBehaviour
 
         if (CanSubmit())
         {
+			Debug.Log("Tadam");
             Send(Network.player, inputField, 1);
-			MessageManager(inputField, 0);
+			//MessageManager(inputField, 0);
         }
 
         GUI.SetNextControlName("Chat");
@@ -123,9 +125,9 @@ public class Chat : MonoBehaviour
 
     bool CanSubmit()
     {
-        if (Event.current.type == EventType.keyDown && Event.current.character.ToString() == Environment.NewLine && inputField.Length > 0)
-            return true;
-
+        if (Event.current.type == EventType.keyDown && Event.current.character.ToString () == Environment.NewLine && inputField.Length > 0)
+			return true;
+				
         return false;
     }
 
